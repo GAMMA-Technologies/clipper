@@ -11,24 +11,24 @@ endif()
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 if(NOT clipper_FIND_QUIETLY)
-  message(STATUS "CLIPPER v${PROJECT_VERSION}")
+    message(STATUS "CLIPPER v${PROJECT_VERSION}")
 endif()
 
 ###############################################################################
 # Options
 ###############################################################################
 
-option(CLIPPER_BUILD_BINDINGS_PYTHON "Build Python bindings" ON)
+option(CLIPPER_BUILD_BINDINGS_PYTHON "Build Python bindings" OFF)
 option(CLIPPER_BUILD_BINDINGS_MATLAB "Build MATLAB bindings" OFF)
 option(CLIPPER_BUILD_TESTS "Build testsuite" OFF)
 option(CLIPPER_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(CLIPPER_ENABLE_MKL "Use MKL with Eigen" OFF)
 option(CLIPPER_ENABLE_BLAS "Use BLAS with Eigen" OFF) # apt install libopenblas-dev
-option(CLIPPER_ENABLE_MAXCLIQUE "Use PMC lib for solveAsMaximumClique" ON)
-option(CLIPPER_ENABLE_SCS_SDR "Use SCS lib for solveAsMSRCSDR" ON)
+option(CLIPPER_ENABLE_MAXCLIQUE "Use PMC lib for solveAsMaximumClique" OFF)
+option(CLIPPER_ENABLE_SCS_SDR "Use SCS lib for solveAsMSRCSDR" OFF)
 
 if(CLIPPER_ENABLE_MKL AND CLIPPER_ENABLE_BLAS)
-  message(FATAL_ERROR "Cannot enable both MKL and BLAS (prefer MKL)")
+    message(FATAL_ERROR "Cannot enable both MKL and BLAS (prefer MKL)")
 endif()
 
 ###############################################################################
@@ -64,25 +64,25 @@ if(CLIPPER_ENABLE_BLAS)
 endif()
 
 if(CLIPPER_BUILD_BINDINGS_PYTHON)
-  FetchContent_Declare(pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG        v2.9.2
-  )
-  FetchContent_MakeAvailable(pybind11)
+    FetchContent_Declare(pybind11
+        GIT_REPOSITORY https://github.com/pybind/pybind11
+        GIT_TAG v2.9.2
+    )
+    FetchContent_MakeAvailable(pybind11)
 endif()
 
 if(CLIPPER_ENABLE_MAXCLIQUE)
     FetchContent_Declare(pmc
-        GIT_REPOSITORY  https://github.com/jingnanshi/pmc
-        GIT_TAG         16af470353a784352760ec2deea25fa7ed602450)
+        GIT_REPOSITORY https://github.com/jingnanshi/pmc
+        GIT_TAG 16af470353a784352760ec2deea25fa7ed602450)
     FetchContent_MakeAvailable(pmc)
 endif()
 
 if(CLIPPER_ENABLE_SCS_SDR)
     include(FetchContent)
     FetchContent_Declare(scs
-        GIT_REPOSITORY  https://github.com/cvxgrp/scs
-        GIT_TAG         3.2.3)
+        GIT_REPOSITORY https://github.com/cvxgrp/scs
+        GIT_TAG 3.2.3)
     FetchContent_MakeAvailable(scs)
 endif()
 
@@ -90,23 +90,23 @@ endif()
 # Targets
 ###############################################################################
 
-add_library(clipper SHARED)
+add_library(clipper)
 target_sources(clipper PRIVATE
-  src/clipper.cpp
-  src/utils.cpp
-  src/dsd.cpp
-  src/sdp.cpp
-  src/maxclique.cpp
-  src/invariants/euclidean_distance.cpp
-  src/invariants/pointnormal_distance.cpp)
+    src/clipper.cpp
+    src/utils.cpp
+    src/dsd.cpp
+    src/sdp.cpp
+    src/maxclique.cpp
+    src/invariants/euclidean_distance.cpp
+    src/invariants/pointnormal_distance.cpp)
 target_link_libraries(clipper PUBLIC Eigen3::Eigen)
-target_link_libraries(clipper PRIVATE OpenMP::OpenMP_CXX)
+#target_link_libraries(clipper PRIVATE OpenMP::OpenMP_CXX)
 target_include_directories(clipper PUBLIC
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
-target_compile_options(clipper PUBLIC -march=native -mavx -mfma)
+#target_compile_options(clipper PUBLIC -march=native -mavx -mfma)
 set_target_properties(clipper PROPERTIES
-  VERSION ${PROJECT_VERSION})
+    VERSION ${PROJECT_VERSION})
 target_compile_definitions(clipper PUBLIC CLIPPER_VERSION="${PROJECT_VERSION}")
 
 if(MKL_FOUND)
@@ -166,20 +166,20 @@ install(TARGETS clipper
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT clipper-targets
-  FILE clipper-targets.cmake
-  DESTINATION ${INSTALL_CONFIGDIR})
+    FILE clipper-targets.cmake
+    DESTINATION ${INSTALL_CONFIGDIR})
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/clipper-config-version.cmake
-  VERSION ${PROJECT_VERSION}
-  COMPATIBILITY AnyNewerVersion)
+    ${CMAKE_CURRENT_BINARY_DIR}/clipper-config-version.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion)
 
 configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/cmake/clipper-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/clipper-config.cmake
-  INSTALL_DESTINATION ${INSTALL_CONFIGDIR})
+    ${CMAKE_CURRENT_BINARY_DIR}/clipper-config.cmake
+    INSTALL_DESTINATION ${INSTALL_CONFIGDIR})
 
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/clipper-config.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/clipper-config-version.cmake
-  DESTINATION ${INSTALL_CONFIGDIR})
+    ${CMAKE_CURRENT_BINARY_DIR}/clipper-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/clipper-config-version.cmake
+    DESTINATION ${INSTALL_CONFIGDIR})
