@@ -25,7 +25,7 @@ option(CLIPPER_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(CLIPPER_ENABLE_MKL "Use MKL with Eigen" OFF)
 option(CLIPPER_ENABLE_BLAS "Use BLAS with Eigen" OFF) # apt install libopenblas-dev
 option(CLIPPER_ENABLE_MAXCLIQUE "Use PMC lib for solveAsMaximumClique" OFF)
-option(CLIPPER_ENABLE_SCS_SDR "Use SCS lib for solveAsMSRCSDR" OFF)
+option(CLIPPER_ENABLE_SCS_SDR "Use SCS lib for solveAsMSRCSDR" ON)
 
 if(CLIPPER_ENABLE_MKL AND CLIPPER_ENABLE_BLAS)
     message(FATAL_ERROR "Cannot enable both MKL and BLAS (prefer MKL)")
@@ -98,7 +98,8 @@ target_sources(clipper PRIVATE
     src/sdp.cpp
     src/maxclique.cpp
     src/invariants/euclidean_distance.cpp
-    src/invariants/pointnormal_distance.cpp)
+    src/invariants/pointnormal_distance.cpp
+    src/invariants/normal_distance.cpp)
 target_link_libraries(clipper PUBLIC Eigen3::Eigen)
 #target_link_libraries(clipper PRIVATE OpenMP::OpenMP_CXX)
 target_include_directories(clipper PUBLIC
