@@ -26,9 +26,9 @@ namespace invariants {
     struct Params
     {
       double sigp = 0.5; ///< point - spread of exp kernel
-      double epsp = 0.5; ///< point - bound on consistency score
+      double epsp = 0.25; ///< point - bound on consistency score
       double sign = 0.10; ///< normal - spread of exp kernel
-      double epsn = 0.35; ///< normal - bound on consistency score
+      double epsn = 0.15; ///< normal - bound on consistency score
     };
   public:
     NormalDistance(const Params& params)
