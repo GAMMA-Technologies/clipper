@@ -22,15 +22,14 @@ namespace invariants {
 class NormalDistance : public PairwiseInvariant {
 public:
   struct Params {
-    double sigp = 0.5;  ///< point - spread of exp kernel
-    double epsp = 0.5;  ///< point - bound on consistency score
+    double sigp = 2.0;  ///< point - spread of exp kernel
+    double epsp = 1.0;  ///< point - bound on consistency score
     double sign = 0.10; ///< normal - spread of exp kernel
-    double epsn = 0.35; ///< normal - bound on consistency score
+    double epsn = 0.15; ///< normal - bound on consistency score
   };
 
 public:
-  NormalDistance(const Params &params, std::string filepath = "/tmp")
-      : params_(params), filepath_(filepath) {}
+  NormalDistance(const Params &params) : params_(params) {}
   ~NormalDistance() = default;
 
   /**
@@ -47,11 +46,14 @@ public:
   double operator()(const Datum &ai, const Datum &aj, const Datum &bi,
                     const Datum &bj) override;
 
-  inline void log_to_file(const std::string &message);
+  inline Eigen::Matrix<double, 4, 2>
+  getGraffMatrixFromDatum(const Eigen::Matrix<double, 6, 1> &d);
+
+  inline double dGraff(const Eigen::Matrix<double, 4, 2> &Y1,
+                       const Eigen::Matrix<double, 4, 2> &Y2);
 
 private:
   Params params_;
-  std::string filepath_;
 };
 
 using NormalDistancePtr = std::shared_ptr<NormalDistance>;

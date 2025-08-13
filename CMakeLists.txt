@@ -99,7 +99,8 @@ target_sources(clipper PRIVATE
     src/maxclique.cpp
     src/invariants/euclidean_distance.cpp
     src/invariants/pointnormal_distance.cpp
-    src/invariants/normal_distance.cpp)
+    src/invariants/normal_distance.cpp
+    src/invariants/dgraff_distance.cpp)
 #target_link_libraries(clipper PUBLIC Eigen3::Eigen)
 #target_link_libraries(clipper PRIVATE OpenMP::OpenMP_CXX)
 target_include_directories(clipper PUBLIC
