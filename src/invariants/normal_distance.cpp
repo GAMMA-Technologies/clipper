@@ -21,10 +21,10 @@ inline void NormalDistance::log_to_file(const std::string &message) {
 double NormalDistance::operator()(const Datum &ai, const Datum &aj,
                                   const Datum &bi, const Datum &bj) {
   std::ostringstream log;
-  log << "ai" << ai.transpose() << "\n"
-      << "aj" << aj.transpose() << "\n"
-      << "bi" << bi.transpose() << "\n"
-      << "bj" << bj.transpose() << "\n";
+  log << "ai: " << ai.transpose() << "\n"
+      << "aj: " << aj.transpose() << "\n"
+      << "bi: " << bi.transpose() << "\n"
+      << "bj: " << bj.transpose() << "\n";
 
   // point distance
   const double d_ai = -1 * ai.head<3>().dot(ai.tail<3>());
